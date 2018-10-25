@@ -128,14 +128,8 @@ export default {
         }
     },
     watch: {
-        choose_theme: function (val) {
-            this.$store.commit("gateway/set_app_data", {
-                config: {
-                    appearance: {
-                        theme: val
-                    }
-                }
-            });
+        choose_theme: function () {
+            this.$gateway.call("set_theme", this.choose_theme)
         }
     },
     mounted () {

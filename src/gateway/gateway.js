@@ -12,14 +12,6 @@ export class Gateway {
         this.token = null
         this.scee = new SCEE()
 
-        this.app.store.commit("gateway/set_app_data", {
-            config: {
-                appearance: {
-                    theme: "dark"
-                }
-            }
-        });
-
         this.closeDialog = false
 
         this.app.store.commit("gateway/set_app_data", {
@@ -76,7 +68,6 @@ export class Gateway {
         })
 
     }
-
 
     send(module, method, data={}) {
         let message = {
