@@ -96,7 +96,7 @@ export default {
                 cancel: {
                     flat: true,
                     label: "CANCEL",
-                    color: this.theme=="dark"?"dark":"white"
+                    color: this.theme=="dark"?"white":"dark"
                 }
             }).then(() => {
                 this.$router.replace({ path: "/wallet-select" })

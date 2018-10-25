@@ -74,7 +74,7 @@
                 <q-item v-if="mode=='edit'">
                     <q-item-main>
                         <q-field>
-                            <q-btn class="float-right" color="red" @click="deleteEntry()" label="Delete" :color="theme=='dark'?'dark':'white'"/>
+                            <q-btn class="float-right" color="red" @click="deleteEntry()" label="Delete" />
                         </q-field>
                     </q-item-main>
                 </q-item>

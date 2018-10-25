@@ -256,7 +256,7 @@ export default {
                 cancel: {
                     flat: true,
                     label: "CANCEL",
-                    color: this.theme=="dark"?"dark":"white"
+                    color: this.theme=="dark"?"white":"dark"
                 }
             }).then(password => {
                 //this.spinner = true
@@ -312,7 +312,7 @@ export default {
                 cancel: {
                     flat: true,
                     label: "CANCEL",
-                    color: this.theme=="dark"?"dark":"white"
+                    color: this.theme=="dark"?"white":"dark"
                 }
             }).then(password => {
                 if(this.key_image_import_export == "Export")

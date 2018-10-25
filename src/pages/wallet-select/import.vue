@@ -19,7 +19,7 @@
                     <input type="file" id="walletPath" v-on:change="setWalletPath" ref="fileInput" hidden />
                 </div>
                 <div class="col-auto">
-                    <q-btn v-on:click="selectFile" class="float-right" :color="theme=='dark'?'dark':'white'">Select wallet file</q-btn>
+                    <q-btn v-on:click="selectFile" class="float-right" :text-color="theme=='dark'?'white':'dark'">Select wallet file</q-btn>
                 </div>
             </div>
         </q-field>

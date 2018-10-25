@@ -134,7 +134,7 @@
             <q-field class="q-mt-sm">
                 <q-btn
                     :disable="!is_ready"
-                    :color="theme=='dark'?'dark':'white'"
+                    :text-color="theme=='dark'?'white':'dark'"
                     @click="saveTxNotes" label="Save tx notes" />
             </q-field>
 

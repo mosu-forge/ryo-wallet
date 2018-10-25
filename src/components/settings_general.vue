@@ -47,7 +47,7 @@
                 <input type="file" webkitdirectory directory id="dataPath" v-on:change="setDataPath" ref="fileInput" hidden />
             </div>
             <div class="col-4">
-                <q-btn v-on:click="selectPath" :color="theme=='dark'?'dark':'white'">Select Location</q-btn>
+                <q-btn v-on:click="selectPath" :text-color="theme=='dark'?'white':'dark'">Select Location</q-btn>
             </div>
         </div>
     </q-field>

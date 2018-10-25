@@ -56,7 +56,7 @@ export class Gateway {
             cancel: {
                 flat: true,
                 label: "CANCEL",
-                color: this.app.store.state.gateway.app.config.appearance.theme=="dark"?"dark":"white"
+                color: this.app.store.state.gateway.app.config.appearance.theme=="dark"?"white":"dark"
             }
         }).then(() => {
             this.closeDialog = false

@@ -25,7 +25,7 @@
             </div>
 
             <div>
-                <q-btn @click="newTx.amount = unlocked_balance / 1e9" :color="theme=='dark'?'dark':'white'">All coins</q-btn>
+                <q-btn @click="newTx.amount = unlocked_balance / 1e9" :text-color="theme=='dark'?'white':'dark'">All coins</q-btn>
             </div>
 
         </div>
@@ -263,7 +263,7 @@ export default {
                 cancel: {
                     flat: true,
                     label: "CANCEL",
-                    color: this.theme=="dark"?"dark":"white"
+                    color: this.theme=="dark"?"white":"dark"
                 }
             }).then(password => {
                 this.$store.commit("gateway/set_tx_status", {
