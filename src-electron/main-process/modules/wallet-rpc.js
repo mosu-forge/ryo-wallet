@@ -221,6 +221,14 @@ export class WalletRPC {
                 this.importKeyImages(params.password, params.path)
                 break
 
+            case "change_wallet_password":
+                this.changeWalletPassword(params.old_password, params.new_password)
+                break
+
+            case "delete_wallet":
+                this.deleteWallet(params.password)
+                break
+
             default:
         }
     }
@@ -1097,6 +1105,56 @@ export class WalletRPC {
 
     }
 
+    changeWalletPassword(old_password, new_password) {
+        crypto.pbkdf2(old_password, this.auth[2], 1000, 64, "sha512", (err, password_hash) => {
+            if (err) {
+                this.sendGateway("show_notification", {type: "negative", message: "Internal error", timeout: 2000})
+                return
+            }
+            if(this.wallet_state.password_hash !== password_hash.toString("hex")) {
+                this.sendGateway("show_notification", {type: "negative", message: "Invalid old password", timeout: 2000})
+                return
+            }
+
+            this.sendRPC("change_wallet_password", {old_password, new_password}).then((data) => {
+                console.log(data)
+                if(data.hasOwnProperty("error") || !data.hasOwnProperty("result")) {
+                    this.sendGateway("show_notification", {type: "negative", message: "Error changing password", timeout: 2000})
+                    return
+                }
+
+                // store hash of the password so we can check against it later when requesting private keys, or for sending txs
+                this.wallet_state.password_hash = crypto.pbkdf2Sync(new_password, this.auth[2], 1000, 64, "sha512").toString("hex")
+
+                this.sendGateway("show_notification", {message: "Password updated", timeout: 2000})
+
+            })
+
+        })
+    }
+
+    deleteWallet(password) {
+        crypto.pbkdf2(password, this.auth[2], 1000, 64, "sha512", (err, password_hash) => {
+            if (err) {
+                this.sendGateway("show_notification", {type: "negative", message: "Internal error", timeout: 2000})
+                return
+            }
+            if(this.wallet_state.password_hash !== password_hash.toString("hex")) {
+                this.sendGateway("show_notification", {type: "negative", message: "Invalid password", timeout: 2000})
+                return
+            }
+
+            let wallet_path = path.join(this.wallet_dir, this.wallet_state.name)
+            this.closeWallet().then(() => {
+                fs.unlinkSync(wallet_path)
+                fs.unlinkSync(wallet_path+".keys")
+                fs.unlinkSync(wallet_path+".address.txt")
+                this.listWallets()
+                this.sendGateway("return_to_wallet_select")
+            })
+        })
+    }
+
     saveWallet() {
         return new Promise((resolve, reject) => {
             this.sendRPC("store").then(() => {
@@ -1110,9 +1168,10 @@ export class WalletRPC {
             clearInterval(this.heartbeat)
             this.wallet_state = {
                 open: false,
+                name: "",
+                password_hash: null,
                 balance: null,
-                unlocked_balance: null,
-                password_hash: null
+                unlocked_balance: null
             }
 
             this.saveWallet().then(() => {
