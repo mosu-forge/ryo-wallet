@@ -224,6 +224,8 @@ export class Backend {
 
             // semi-shallow object merge
             Object.keys(disk_config_data).map(key => {
+                if(!this.config_data.hasOwnProperty(key))
+                    this.config_data[key] = {}
                 this.config_data[key] = Object.assign(this.config_data[key], disk_config_data[key])
             });
 
@@ -311,18 +313,35 @@ export class Backend {
                             }
                         });
                     }).catch(error => {
-                        // send an unrecoverable error to frontend
-                        // wallet-rpc cannot start or be reached
+                        this.send("set_app_data", {
+                            status: {
+                                code: -1 // Return to config screen
+                            }
+                        });
+                        return;
                     });
 
                 }).catch(error => {
-                    // send an unrecoverable error to frontend
-                    // daemon cannot start or be reached
+                    if(this.config_data.daemon.type == "remote") {
+                        this.send("show_notification", {type: "negative", message: "Remote daemon cannot be reached", timeout: 2000})
+                    } else {
+                        this.send("show_notification", {type: "negative", message: "Local daemon internal error", timeout: 2000})
+                    }
+                    this.send("set_app_data", {
+                        status: {
+                            code: -1 // Return to config screen
+                        }
+                    });
+                    return;
                 });
 
             }).catch(error => {
-                // send an unrecoverable error to frontend
-                // daemon cannot start or be reached
+                this.send("set_app_data", {
+                    status: {
+                        code: -1 // Return to config screen
+                    }
+                });
+                return;
             });
 
         });
